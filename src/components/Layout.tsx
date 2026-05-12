@@ -26,7 +26,7 @@ export const Layout: React.FC<LayoutProps> = ({ readOnly = false }) => {
         <div>
           <h1 className="text-xl font-semibold tracking-tight text-white mb-2 flex items-center gap-2">
             Study Tracker
-            {!readOnly && <ShieldCheck size={18} className="text-indigo-400" title="Admin Mode" />}
+            {!readOnly && <ShieldCheck size={18} className="text-indigo-400" />}
           </h1>
           {readOnly && <p className="text-xs text-zinc-500 mb-6 px-1 uppercase tracking-wider font-semibold">Public View</p>}
           {!readOnly && <div className="h-6"></div>}
