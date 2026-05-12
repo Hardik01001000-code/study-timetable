@@ -7,8 +7,9 @@ A minimalist, interactive study planner built with React, TypeScript, and Vite. 
 - **Subject & Topic Management**: Create and organize subjects and their respective topics.
 - **Interactive Scheduling**: Schedule specific study sessions for topics using a calendar-based interface.
 - **Spaced Repetition Ready**: Track multiple revision dates for single topics.
-- **Local Storage Persistence**: All data is saved directly to your browser's local storage.
-- **Automatic Default Initialization**: For new users, a default comprehensive syllabus (including General Aptitude, Engineering Mathematics, and core civil engineering subjects) is automatically loaded to get started immediately.
+- **Firebase Real-Time Sync**: All data is saved and synchronized instantly across multiple devices using Firebase Firestore.
+- **Automatic Default Initialization**: For new databases, a default comprehensive syllabus (including General Aptitude, Engineering Mathematics, and core civil engineering subjects) is automatically loaded to get started immediately.
+- **Data Migration**: A temporary "Migrate Data to Firebase" button is available at the bottom of the app to easily seed your new Firestore database with predefined syllabus data.
 - **Beautiful UI**: "Cute Soft Dark Mode" with smooth micro-animations and fully responsive design.
 
 ## Tech Stack

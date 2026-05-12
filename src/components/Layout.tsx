@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { Calendar, BookOpen } from 'lucide-react';
 import { useStore } from '../hooks/useStore';
+import { MigrateDataButton } from './MigrateDataButton';
 
 export const Layout: React.FC = () => {
   const { subjects } = useStore();
@@ -70,6 +71,7 @@ export const Layout: React.FC = () => {
       <main className="flex-1 overflow-auto pb-20 md:pb-0">
         <div className="max-w-5xl mx-auto p-4 md:p-10">
           <Outlet />
+          <MigrateDataButton />
         </div>
       </main>
 
