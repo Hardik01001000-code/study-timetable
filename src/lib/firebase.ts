@@ -6,6 +6,7 @@ import { initializeFirestore, persistentLocalCache, collection } from "firebase/
 const firebaseConfig = {
   apiKey: "AIzaSyC6qzjL91Og7voA1JOHoME22NNoepzAyNg",
   authDomain: "study-timetable-538cb.firebaseapp.com",
+  databaseURL: "https://study-timetable-538cb-default-rtdb.firebaseio.com",
   projectId: "study-timetable-538cb",
   storageBucket: "study-timetable-538cb.firebasestorage.app",
   messagingSenderId: "38875097860",
