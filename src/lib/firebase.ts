@@ -1,6 +1,5 @@
 import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
-import { getFirestore, collection } from "firebase/firestore";
+import { initializeFirestore, persistentLocalCache, collection } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -16,10 +15,11 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
 
-// Initialize Cloud Firestore and get a reference to the service
-export const db = getFirestore(app);
+// Initialize Cloud Firestore with offline persistence
+export const db = initializeFirestore(app, {
+  localCache: persistentLocalCache()
+});
 
 // Collection references
 export const subjectsCollection = collection(db, 'subjects');

@@ -23,7 +23,7 @@ export const MigrateDataButton: React.FC = () => {
       alert("Migration Complete!");
     } catch (error) {
       console.error("Migration failed: ", error);
-      alert("Migration Failed! Check console.");
+      alert("Migration failed. Check console.");
     } finally {
       setIsMigrating(false);
     }
