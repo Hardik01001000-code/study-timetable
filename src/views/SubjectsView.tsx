@@ -10,6 +10,8 @@ export const SubjectsView: React.FC<{ readOnly?: boolean }> = ({ readOnly = fals
   const [newSubjectPriority, setNewSubjectPriority] = useState<Priority>('Medium');
   const [isAdding, setIsAdding] = useState(false);
 
+  const basePath = readOnly ? '' : '/admin';
+
   const handleAddSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (newSubjectName.trim()) {
@@ -87,7 +89,7 @@ export const SubjectsView: React.FC<{ readOnly?: boolean }> = ({ readOnly = fals
             }).map((subject) => (
               <div key={subject.id} className="bg-zinc-900 rounded-3xl p-5 shadow-md flex flex-col gap-4">
                 <div className="flex justify-between items-start gap-4">
-                  <Link to={`/subjects/${subject.id}`} className="text-zinc-200 font-medium flex items-center gap-3 hover:text-indigo-400 transition-colors">
+                  <Link to={`${basePath}/subjects/${subject.id}`} className="text-zinc-200 font-medium flex items-center gap-3 hover:text-indigo-400 transition-colors">
                     <span className="text-lg">
                       {subject.priority === 'High' ? '💖' : subject.priority === 'Medium' ? '⭐️' : '🌱'}
                     </span>
@@ -136,7 +138,7 @@ export const SubjectsView: React.FC<{ readOnly?: boolean }> = ({ readOnly = fals
                   }).map((subject) => (
                     <tr key={subject.id} className="hover:bg-zinc-800/30 transition-colors group">
                       <td className="px-6 py-4">
-                        <Link to={`/subjects/${subject.id}`} className="text-zinc-200 font-medium flex items-center gap-3 hover:text-indigo-400 transition-colors w-fit">
+                        <Link to={`${basePath}/subjects/${subject.id}`} className="text-zinc-200 font-medium flex items-center gap-3 hover:text-indigo-400 transition-colors w-fit">
                           <span className="text-base">
                             {subject.priority === 'High' ? '💖' : subject.priority === 'Medium' ? '⭐️' : '🌱'}
                           </span>

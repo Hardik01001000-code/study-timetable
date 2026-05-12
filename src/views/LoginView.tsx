@@ -24,10 +24,15 @@ export const LoginView: React.FC = () => {
     setIsLoading(true);
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate('/admin');
+      await signInWithEmailAndPassword(auth, email.trim(), password);
     } catch (err: any) {
-      setError(err.message || 'Failed to login');
+      let friendlyMessage = err.message;
+      if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+        friendlyMessage = 'Invalid email or password. Please try again.';
+      } else if (err.code === 'auth/network-request-failed') {
+        friendlyMessage = 'Network error. Please check your connection.';
+      }
+      setError(friendlyMessage);
     } finally {
       setIsLoading(false);
     }

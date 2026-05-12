@@ -107,6 +107,7 @@ const MultiSelectCalendarModal: React.FC<{
 export const SubjectDetailsView: React.FC<{ readOnly?: boolean }> = ({ readOnly = false }) => {
   const { id } = useParams<{ id: string }>();
   const { subjects, topics, addTopic, deleteTopic, toggleTopicCompletion, removeTopicSession, setTopicSessions } = useStore();
+  const basePath = readOnly ? '' : '/admin';
   
   const subject = subjects.find((s) => s.id === id);
   
@@ -124,7 +125,7 @@ export const SubjectDetailsView: React.FC<{ readOnly?: boolean }> = ({ readOnly 
     return (
       <div className="text-center py-20 text-zinc-500">
         <p>Subject not found.</p>
-        <Link to="/subjects" className="text-indigo-400 hover:underline mt-4 inline-block">Go back to Subjects</Link>
+        <Link to={`${basePath}/subjects`} className="text-indigo-400 hover:underline mt-4 inline-block">Go back to Subjects</Link>
       </div>
     );
   }
@@ -147,7 +148,7 @@ export const SubjectDetailsView: React.FC<{ readOnly?: boolean }> = ({ readOnly 
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-10">
-      <Link to="/subjects" className="inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-zinc-200 mb-6 transition-colors">
+      <Link to={`${basePath}/subjects`} className="inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-zinc-200 mb-6 transition-colors">
         <ArrowLeft size={16} />
         Back to Subjects
       </Link>
