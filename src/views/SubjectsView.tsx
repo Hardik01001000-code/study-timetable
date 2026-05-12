@@ -4,7 +4,7 @@ import { Plus, Trash2, ChevronRight } from 'lucide-react';
 import { useStore } from '../hooks/useStore';
 import type { Priority } from '../types';
 
-export const SubjectsView: React.FC = () => {
+export const SubjectsView: React.FC<{ readOnly?: boolean }> = ({ readOnly = false }) => {
   const { subjects, addSubject, deleteSubject, updateSubjectPriority } = useStore();
   const [newSubjectName, setNewSubjectName] = useState('');
   const [newSubjectPriority, setNewSubjectPriority] = useState<Priority>('Medium');
@@ -24,13 +24,15 @@ export const SubjectsView: React.FC = () => {
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold tracking-tight text-white">All Subjects</h1>
-        <button
-          onClick={() => setIsAdding(!isAdding)}
-          className="flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-full shadow-md active:scale-95 transition-all duration-200 text-sm font-medium min-w-[44px] min-h-[44px]"
-        >
-          <Plus size={20} />
-          <span className="hidden sm:inline">Add Subject</span>
-        </button>
+        {!readOnly && (
+          <button
+            onClick={() => setIsAdding(!isAdding)}
+            className="flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-full shadow-md active:scale-95 transition-all duration-200 text-sm font-medium min-w-[44px] min-h-[44px]"
+          >
+            <Plus size={20} />
+            <span className="hidden sm:inline">Add Subject</span>
+          </button>
+        )}
       </div>
 
       {isAdding && (
@@ -92,18 +94,21 @@ export const SubjectsView: React.FC = () => {
                     <span className="text-lg truncate">{subject.name}</span>
                     <ChevronRight size={18} className="text-zinc-500" />
                   </Link>
-                  <button
-                    onClick={() => deleteSubject(subject.id)}
-                    className="text-zinc-500 hover:text-red-400 bg-zinc-950 hover:bg-zinc-800 p-3 rounded-full shadow-inner active:scale-95 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center flex-shrink-0"
-                    title="Delete Subject"
-                  >
-                    <Trash2 size={18} />
-                  </button>
+                  {!readOnly && (
+                    <button
+                      onClick={() => deleteSubject(subject.id)}
+                      className="text-zinc-500 hover:text-red-400 bg-zinc-950 hover:bg-zinc-800 p-3 rounded-full shadow-inner active:scale-95 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center flex-shrink-0"
+                      title="Delete Subject"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  )}
                 </div>
                 <select
                   value={subject.priority}
+                  disabled={readOnly}
                   onChange={(e) => updateSubjectPriority(subject.id, e.target.value as Priority)}
-                  className="w-full bg-zinc-950 border border-zinc-800 rounded-full px-4 py-3 text-sm text-zinc-300 focus:outline-none focus:border-indigo-500 shadow-inner appearance-none cursor-pointer"
+                  className={`w-full bg-zinc-950 border border-zinc-800 rounded-full px-4 py-3 text-sm text-zinc-300 focus:outline-none focus:border-indigo-500 shadow-inner appearance-none ${!readOnly ? 'cursor-pointer' : 'opacity-80'}`}
                 >
                   <option value="High">💖 High</option>
                   <option value="Medium">⭐️ Medium</option>
@@ -121,7 +126,7 @@ export const SubjectsView: React.FC = () => {
                   <tr className="border-b border-zinc-800 bg-zinc-900/50">
                     <th className="px-6 py-4 text-sm font-medium text-zinc-400 uppercase tracking-wider">Subject Name</th>
                     <th className="px-6 py-4 text-sm font-medium text-zinc-400 uppercase tracking-wider">Priority</th>
-                    <th className="px-6 py-4 text-sm font-medium text-zinc-400 uppercase tracking-wider text-right">Actions</th>
+                    {!readOnly && <th className="px-6 py-4 text-sm font-medium text-zinc-400 uppercase tracking-wider text-right">Actions</th>}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-800">
@@ -142,23 +147,26 @@ export const SubjectsView: React.FC = () => {
                       <td className="px-6 py-4">
                         <select
                           value={subject.priority}
+                          disabled={readOnly}
                           onChange={(e) => updateSubjectPriority(subject.id, e.target.value as Priority)}
-                          className="bg-zinc-950 border border-zinc-800 rounded-full px-4 py-2 text-sm text-zinc-300 focus:outline-none focus:border-indigo-500 shadow-inner cursor-pointer appearance-none min-w-[120px]"
+                          className={`bg-zinc-950 border border-zinc-800 rounded-full px-4 py-2 text-sm text-zinc-300 focus:outline-none focus:border-indigo-500 shadow-inner appearance-none min-w-[120px] ${!readOnly ? 'cursor-pointer' : 'opacity-80'}`}
                         >
                           <option value="High">💖 High</option>
                           <option value="Medium">⭐️ Medium</option>
                           <option value="Low">🌱 Low</option>
                         </select>
                       </td>
-                      <td className="px-6 py-4 text-right">
-                        <button
-                          onClick={() => deleteSubject(subject.id)}
-                          className="text-zinc-500 hover:text-red-400 bg-zinc-950 hover:bg-zinc-800 p-2 rounded-full shadow-inner active:scale-95 transition-all duration-200 min-w-[44px] min-h-[44px] inline-flex items-center justify-center opacity-0 group-hover:opacity-100 focus:opacity-100"
-                          title="Delete Subject"
-                        >
-                          <Trash2 size={18} />
-                        </button>
-                      </td>
+                      {!readOnly && (
+                        <td className="px-6 py-4 text-right">
+                          <button
+                            onClick={() => deleteSubject(subject.id)}
+                            className="text-zinc-500 hover:text-red-400 bg-zinc-950 hover:bg-zinc-800 p-2 rounded-full shadow-inner active:scale-95 transition-all duration-200 min-w-[44px] min-h-[44px] inline-flex items-center justify-center opacity-0 group-hover:opacity-100 focus:opacity-100"
+                            title="Delete Subject"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        </td>
+                      )}
                     </tr>
                   ))}
                 </tbody>

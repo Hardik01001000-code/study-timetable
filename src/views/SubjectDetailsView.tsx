@@ -104,7 +104,7 @@ const MultiSelectCalendarModal: React.FC<{
 };
 
 
-export const SubjectDetailsView: React.FC = () => {
+export const SubjectDetailsView: React.FC<{ readOnly?: boolean }> = ({ readOnly = false }) => {
   const { id } = useParams<{ id: string }>();
   const { subjects, topics, addTopic, deleteTopic, toggleTopicCompletion, removeTopicSession, setTopicSessions } = useStore();
   
@@ -162,13 +162,15 @@ export const SubjectDetailsView: React.FC = () => {
           </h1>
           <p className="text-zinc-400">Manage topics and schedule for this subject.</p>
         </div>
-        <button
-          onClick={() => setIsAdding(!isAdding)}
-          className="flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-full shadow-md active:scale-95 transition-all duration-200 text-sm font-medium min-w-[44px] min-h-[44px]"
-        >
-          <Plus size={20} />
-          <span className="hidden sm:inline">Add Topic</span>
-        </button>
+        {!readOnly && (
+          <button
+            onClick={() => setIsAdding(!isAdding)}
+            className="flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-full shadow-md active:scale-95 transition-all duration-200 text-sm font-medium min-w-[44px] min-h-[44px]"
+          >
+            <Plus size={20} />
+            <span className="hidden sm:inline">Add Topic</span>
+          </button>
+        )}
       </div>
 
       {isAdding && (
@@ -232,23 +234,25 @@ export const SubjectDetailsView: React.FC = () => {
                     {topic.name}
                   </span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setSchedulingTopicId(topic.id)}
-                    className="text-indigo-400 hover:text-indigo-300 bg-indigo-500/10 hover:bg-indigo-500/20 px-4 py-2 rounded-full shadow-inner active:scale-95 transition-all duration-200 min-h-[44px] flex items-center gap-2"
-                    title="Schedule Dates"
-                  >
-                    <Calendar size={18} />
-                    <span className="text-sm font-medium">Schedule</span>
-                  </button>
-                  <button
-                    onClick={() => deleteTopic(topic.id)}
-                    className="text-zinc-500 hover:text-red-400 bg-zinc-950 hover:bg-zinc-800 p-2 rounded-full shadow-inner active:scale-95 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                    title="Delete Topic"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
+                {!readOnly && (
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setSchedulingTopicId(topic.id)}
+                      className="text-indigo-400 hover:text-indigo-300 bg-indigo-500/10 hover:bg-indigo-500/20 px-4 py-2 rounded-full shadow-inner active:scale-95 transition-all duration-200 min-h-[44px] flex items-center gap-2"
+                      title="Schedule Dates"
+                    >
+                      <Calendar size={18} />
+                      <span className="text-sm font-medium">Schedule</span>
+                    </button>
+                    <button
+                      onClick={() => deleteTopic(topic.id)}
+                      className="text-zinc-500 hover:text-red-400 bg-zinc-950 hover:bg-zinc-800 p-2 rounded-full shadow-inner active:scale-95 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                      title="Delete Topic"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -284,8 +288,9 @@ export const SubjectDetailsView: React.FC = () => {
                         }`}
                       >
                         <button
-                          onClick={() => toggleTopicCompletion(topic.id, session.date)}
-                          className="flex items-center gap-1.5 focus:outline-none hover:opacity-80 active:scale-90 transition-all"
+                          onClick={() => !readOnly && toggleTopicCompletion(topic.id, session.date)}
+                          disabled={readOnly}
+                          className={`flex items-center gap-1.5 focus:outline-none transition-all ${!readOnly ? 'hover:opacity-80 active:scale-90' : 'cursor-not-allowed opacity-80'}`}
                           title="Toggle Completion"
                         >
                           {session.isCompleted ? <CheckCircle2 size={14} /> : <Circle size={14} />}
@@ -293,34 +298,42 @@ export const SubjectDetailsView: React.FC = () => {
                             {new Date(session.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                           </span>
                         </button>
-                        <div className="w-px h-3 bg-zinc-700/50 mx-0.5"></div>
-                        <button
-                          onClick={() => removeTopicSession(topic.id, session.date)}
-                          className="text-zinc-500 hover:text-red-400 transition-colors active:scale-90"
-                          title="Remove Date"
-                        >
-                          <XCircle size={14} />
-                        </button>
+                        {!readOnly && (
+                          <>
+                            <div className="w-px h-3 bg-zinc-700/50 mx-0.5"></div>
+                            <button
+                              onClick={() => removeTopicSession(topic.id, session.date)}
+                              className="text-zinc-500 hover:text-red-400 transition-colors active:scale-90"
+                              title="Remove Date"
+                            >
+                              <XCircle size={14} />
+                            </button>
+                          </>
+                        )}
                       </div>
                     ))}
-                    <button
-                      onClick={() => setSchedulingTopicId(topic.id)}
-                      className="flex items-center justify-center bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 w-8 h-8 rounded-full shadow-inner active:scale-95 transition-all"
-                      title="Manage Dates"
-                    >
-                      <Plus size={16} />
-                    </button>
+                    {!readOnly && (
+                      <button
+                        onClick={() => setSchedulingTopicId(topic.id)}
+                        className="flex items-center justify-center bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500/20 w-8 h-8 rounded-full shadow-inner active:scale-95 transition-all"
+                        title="Manage Dates"
+                      >
+                        <Plus size={16} />
+                      </button>
+                    )}
                   </div>
                 </div>
-                <div className="flex items-center justify-end">
-                  <button
-                    onClick={() => deleteTopic(topic.id)}
-                    className="text-zinc-500 hover:text-red-400 bg-zinc-950 hover:bg-zinc-800 p-2 rounded-full shadow-inner active:scale-95 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center flex-shrink-0"
-                    title="Delete Topic"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
+                {!readOnly && (
+                  <div className="flex items-center justify-end">
+                    <button
+                      onClick={() => deleteTopic(topic.id)}
+                      className="text-zinc-500 hover:text-red-400 bg-zinc-950 hover:bg-zinc-800 p-2 rounded-full shadow-inner active:scale-95 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center flex-shrink-0"
+                      title="Delete Topic"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
           </div>

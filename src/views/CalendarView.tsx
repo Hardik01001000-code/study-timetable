@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, X, CheckCircle2, Circle } from 'lucide-react
 import { useStore } from '../hooks/useStore';
 import type { Topic, Subject } from '../types';
 
-export const CalendarView: React.FC = () => {
+export const CalendarView: React.FC<{ readOnly?: boolean }> = ({ readOnly = false }) => {
   const { subjects, topics, toggleTopicCompletion } = useStore();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -160,8 +160,9 @@ export const CalendarView: React.FC = () => {
                           return (
                             <div key={topic.id} className="flex items-start gap-3 p-4 rounded-2xl bg-zinc-900 shadow-md border border-zinc-800 hover:border-zinc-700 transition-all duration-200">
                               <button
-                                onClick={() => toggleTopicCompletion(topic.id, session.date)}
-                                className="text-zinc-400 hover:text-indigo-400 transition-colors focus:outline-none flex-shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center -ml-2 -mt-2 active:scale-90"
+                                onClick={() => !readOnly && toggleTopicCompletion(topic.id, session.date)}
+                                disabled={readOnly}
+                                className={`text-zinc-400 transition-colors focus:outline-none flex-shrink-0 min-w-[44px] min-h-[44px] flex items-center justify-center -ml-2 -mt-2 ${!readOnly ? 'hover:text-indigo-400 active:scale-90' : 'cursor-not-allowed opacity-80'}`}
                               >
                                 {session.isCompleted ? (
                                   <CheckCircle2 size={18} className="text-indigo-400" />
